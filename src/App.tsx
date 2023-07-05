@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 const initialFriends = [
   {
@@ -25,67 +26,85 @@ interface FriendProps {
     id: number;
     name: string;
     image: string;
-    balance: number
-  }
+    balance: number;
+  };
 }
 
 interface ButtonProps {
-  children: React.ReactNode
+  children: React.ReactNode;
+  onClick: () => void;
 }
 
 function App(): JSX.Element {
-  return(
+  const [showFormFriend, setShowFormFriend] = useState(false);
+
+  //show add friend form
+  function handleShowForm(): void {
+    setShowFormFriend(show => !show)
+  }
+
+  return (
     <div className="app">
       <div className="sidebar">
         <FriendsList />
-        <FormAddFriend/>
-        <Button>Add friend</Button>
+        {showFormFriend && <FormAddFriend/>}
+        <Button onClick={handleShowForm}>{showFormFriend ? "close" : "Add friend"}</Button>
       </div>
-      <FormSplitBill/>
+      <FormSplitBill />
     </div>
-  )
+  );
 }
 
 function FriendsList(): JSX.Element {
-  return(
-    <ul>{initialFriends.map(friend => <Friend friendObj = {friend} key={friend.id}/>)}</ul>
-  )
+  return (
+    <ul>
+      {initialFriends.map((friend) => (
+        <Friend friendObj={friend} key={friend.id} />
+      ))}
+    </ul>
+  );
 }
 
-function Friend({friendObj}: FriendProps): JSX.Element {
-  return(
+function Friend({ friendObj }: FriendProps): JSX.Element {
+  return (
     <li>
       <img src={friendObj.image} alt={friendObj.name} />
       <h3>{friendObj.name}</h3>
-      {friendObj.balance < 0 && <p className="red">You own {friendObj.name} ${Math.abs(friendObj.balance)}</p>}
-      {friendObj.balance > 0 && <p className="green">{friendObj.name} owns you ${friendObj.balance}</p>}
+      {friendObj.balance < 0 && (
+        <p className="red">
+          You own {friendObj.name} ${Math.abs(friendObj.balance)}
+        </p>
+      )}
+      {friendObj.balance > 0 && (
+        <p className="green">
+          {friendObj.name} owns you ${friendObj.balance}
+        </p>
+      )}
       {friendObj.balance === 0 && <p>You and {friendObj.name} are even</p>}
       <Button>Select</Button>
     </li>
-  )
+  );
 }
 
-function Button({children}: ButtonProps): JSX.Element {
-  return(
-    <button className="button">{children}</button>
-  )
+function Button({ onClick , children }: ButtonProps): JSX.Element {
+  return <button className="button" onClick={onClick}>{children}</button>;
 }
 
 function FormAddFriend(): JSX.Element {
-  return(
+  return ( 
     <form className="form-add-friend">
-      <label>Friend name</label>
-      <input type="text" />
+    <label>Friend name</label>
+    <input type="text" />
 
-      <label>Image URL</label>
-      <input type="text" />
-      <Button>ADD</Button>
-    </form>
-  )
+    <label>Image URL</label>
+    <input type="text" />
+    <Button>ADD</Button>
+  </form>
+)
 }
 
 function FormSplitBill(): JSX.Element {
-  return(
+  return (
     <form className="form-split-bill">
       <h2>Split a bill with X</h2>
       <label>Bill value</label>
@@ -93,7 +112,7 @@ function FormSplitBill(): JSX.Element {
       <label>Your expense</label>
       <input type="text" />
       <label>X's expense</label>
-      <input type="text" disabled/>
+      <input type="text" disabled />
       <label>Who is paying the bill?</label>
       <select>
         <option value="user">You</option>
@@ -101,7 +120,7 @@ function FormSplitBill(): JSX.Element {
       </select>
       <Button>Split bill</Button>
     </form>
-  )
+  );
 }
 
 export default App;

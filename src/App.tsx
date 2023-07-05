@@ -1,3 +1,4 @@
+
 const initialFriends = [
   {
     id: 118836,
@@ -28,11 +29,17 @@ interface FriendProps {
   }
 }
 
+interface ButtonProps {
+  children: React.ReactNode
+}
+
 function App(): JSX.Element {
   return(
     <div className="app">
       <div className="sidebar">
         <FriendsList />
+        <FormAddFriend/>
+        <Button>Add friend</Button>
       </div>
     </div>
   )
@@ -49,11 +56,32 @@ function Friend({friendObj}: FriendProps): JSX.Element {
     <li>
       <img src={friendObj.image} alt={friendObj.name} />
       <h3>{friendObj.name}</h3>
-      {friendObj.balance < 0 && <p className="red">You own {friendObj.name} {Math.abs(friendObj.balance)}</p>}
-      {friendObj.balance > 0 && <p className="green">{friendObj.name} owns you {friendObj.balance}</p>}
+      {friendObj.balance < 0 && <p className="red">You own {friendObj.name} ${Math.abs(friendObj.balance)}</p>}
+      {friendObj.balance > 0 && <p className="green">{friendObj.name} owns you ${friendObj.balance}</p>}
       {friendObj.balance === 0 && <p>You and {friendObj.name} are even</p>}
-      <button className="button">Select</button>
+      <Button>Select</Button>
     </li>
   )
 }
+
+function Button({children}: ButtonProps): JSX.Element {
+  return(
+    <button className="button">{children}</button>
+  )
+}
+
+function FormAddFriend(): JSX.Element {
+  return(
+    <form className="form-add-friend">
+      <label>Friend name</label>
+      <input type="text" />
+
+      <label>Image URL</label>
+      <input type="text" />
+      <Button>ADD</Button>
+    </form>
+  )
+}
+
+
 export default App;

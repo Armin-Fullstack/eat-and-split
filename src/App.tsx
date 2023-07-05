@@ -19,6 +19,15 @@ const initialFriends = [
   },
 ];
 
+interface FriendProps {
+  friendObj: {
+    id: number;
+    name: string;
+    image: string;
+    balance: number
+  }
+}
+
 function App(): JSX.Element {
   return(
     <div className="app">
@@ -35,4 +44,16 @@ function FriendsList(): JSX.Element {
   )
 }
 
+function Friend({friendObj}: FriendProps): JSX.Element {
+  return(
+    <li>
+      <img src={friendObj.image} alt={friendObj.name} />
+      <h3>{friendObj.name}</h3>
+      {friendObj.balance < 0 && <p className="red">You own {friendObj.name} {Math.abs(friendObj.balance)}</p>}
+      {friendObj.balance > 0 && <p className="green">{friendObj.name} owns you {friendObj.balance}</p>}
+      {friendObj.balance === 0 && <p>You and {friendObj.name} are even</p>}
+      <button className="button">Select</button>
+    </li>
+  )
+}
 export default App;
